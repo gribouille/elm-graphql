@@ -1,0 +1,19 @@
+{
+  "name": "elm-graphql",
+  "version": "1.0.0",
+  "description": "An ELM library for GraphQL library",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gribouille/elm-graphql.git"
+  },
+  "keywords": [
+    "ELM",
+    "GraphQL"
+  ],
+  "author": "Gribouille",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/gribouille/elm-graphql/issues"
+  },
+  "homepage": "https://github.com/gribouille/elm-graphql#readme"
+}
