@@ -33,11 +33,15 @@ type alias Error =
     }
 
 
+{-| Path of the response field which experienced the error.
+-}
 type Path
     = PathKey String
     | PathItem Int
 
 
+{-| Error location.
+-}
 type alias Location =
     { line : Int
     , column : Int
@@ -58,6 +62,8 @@ type alias Response a =
     Result Http.Error (Res a)
 
 
+{-| Root data response.
+-}
 type alias Root a =
     { root : a
     }
