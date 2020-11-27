@@ -1,6 +1,6 @@
 module GraphQL exposing
-    ( Response
-    , Error, Path(..), QLRes(..), Res, Root, run, segment
+    ( Response, Error, Path(..), QLRes(..), Res, Root
+    , run, segment
     )
 
 {-| An easy-to-use GraphQL library.
@@ -8,12 +8,12 @@ module GraphQL exposing
 
 ## Types
 
-@docs Config, Purpose, Response
+@docs Response, Error, Path, QLRes, Res, Root
 
 
 ## Functions
 
-@docs exec, query, cmd, variables, decoder, response
+@docs run, segment
 
 -}
 
