@@ -2,7 +2,7 @@ module User exposing (..)
 
 import Json.Encode as E
 import Json.Decode as D
-import Json.Decode.Pipeline exposing (decode, required, optional)
+import Json.Decode.Pipeline exposing (required, optional)
 
 
 type alias User =
@@ -26,7 +26,7 @@ type alias UserInput =
 
 userDecoder : D.Decoder User
 userDecoder =
-  decode User
+  D.succeed User
     |> required "id"        D.int
     |> required "login"     D.string
     |> optional "firstname" D.string ""

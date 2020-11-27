@@ -1,62 +1,79 @@
 # elm-graphql
 
-A ELM library to use the GraphQL API.
+A simple ELM library to use the GraphQL API.
 
-To install the library:
+
+## Install
 
 ```
-> elm-package install gribouille/elm-graphql
+> elm install gribouille/elm-graphql
 ```
 
 
-## Example
+## Examples
 
-1) Configure the API. In this example, the API is protected with a JSON web token
-in the `authorization` header:
-```elm
-config : String -> GraphQL.Config
-config token =
-  GraphQL.Config [ ("authorization", "Bearer " ++ token) ] "/api/graphql"
+To run the examples:
+
+```shell
+$ cd examples
+$ npm install
+$ npm run server
+$ npm run dev
 ```
-
-2) Create a GraphQL request with `cmd` and `exec`:
-```elm
-getUsers : String -> (GraphQL.Purpose Users -> msg) -> Cmd msg
-getUsers token resultCallback =
-  GraphQL.cmd (myRequest token) resultCallback
+Open [http://localhost:8000/src/Main.elm](http://localhost:8000/src/Main.elm).
 
 
-myRequest : String -> Http.Request (GraphQL.Response Users)
-myRequest token =
-  GraphQL.exec (config token) "users"
-    |> GraphQL.query myQuery
-    |> GraphQL.variabes Encode.null
-    |> GraphQL.decoder User.usersDecoder
+## Usage
 
+GraphQL API:
 
-myQuery : String
-myQuery =
-  """
-  query {
-    users { id login firstname lastname email }
-  }
-  """
-```
+```graphql
+type User {
+  id: Int!
+  login: String!
+  firstname: String
+  lastname: String
+  email: String
+}
 
-3) Get the results in the `update` function:
-```elm
-type Msg
-  = GetUsers                    -- msg to execute the request
-  | OnGetUsers (GraphQL.Purpose Users)  -- msg to receive the data
+type Query {
+  users: [User!]!
   ...
+}
+```
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  case msg of
-    GetUsers -> getUsers "myToken" OnGetUsers
-    OnGetUsers res -> GraphQL.response model res
-      (\users -> { model | ... } ! [ ... ] )    -- if success
-      (\error -> { model | ... } ! [ ... ] )    -- if error
+Library usage:
+
+```elm
+type alias User =
+  { id        : Int
+  , login     : String
+  , firstname : String
+  , lastname  : String
+  , email     : String
+  }
+
+
+userDecoder : Decoder User
+userDecoder = ...
+
+
+type Msg
+  = OnUsers (GraphQL.Response (List User))
+  | ...
+
+
+get : Cmd Msg
+get =
+  GraphQL.run
+  { query = "query { users { id login firstname lastname email } }"
+  , decoder = usersDecoder
+  , root = "users"
+  , url = "<url/graphql>"
+  , headers = []
+  , on = OnUsers
+  , variables = Nothing
+  }
 ```
 
 
@@ -65,17 +82,6 @@ update msg model =
 The API documentation is available [here](http://package.elm-lang.org/packages/gribouille/elm-graphql/latest).
 
 
-## Usage
-
-To run the examples:
-
-```shell
-$ cd test
-$ npm install
-$ npm run server
-$ npm run dev
-```
-Open [localhost:8080](http://localhost:8080).
 
 
 ## Contributing
