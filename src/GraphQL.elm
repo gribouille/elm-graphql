@@ -96,10 +96,31 @@ run { query, headers, root, decoder, variables, url, on } =
         , headers = headers
         , url = url
         , body = body query (Maybe.withDefault Encode.null variables)
-        , expect = Http.expectJson on (decoderRes root decoder)
+        , expect = Http.expectStringResponse on (parseResponse root decoder)
         , timeout = Nothing
         , tracker = Nothing
         }
+
+
+parseResponse : String -> Decoder a -> Http.Response String -> Response a
+parseResponse root decoder res =
+    case res of
+        Http.BadUrl_ url ->
+            Err (Http.BadUrl url)
+
+        Http.Timeout_ ->
+            Err Http.Timeout
+
+        Http.NetworkError_ ->
+            Err Http.NetworkError
+
+        Http.BadStatus_ _ body_ ->
+            decodeString (decoderRes root decoder) body_
+                |> Result.mapError (Http.BadBody << errorToString)
+
+        Http.GoodStatus_ _ body_ ->
+            decodeString (decoderRes root decoder) body_
+                |> Result.mapError (Http.BadBody << errorToString)
 
 
 {-| Convert a raw Graph `Response` to the more expressive type `QLRes`.
