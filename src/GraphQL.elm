@@ -163,7 +163,7 @@ body query variables =
 decoderRes : String -> Decoder a -> Decoder (Res a)
 decoderRes root decoder =
     map2 Res
-        (maybe (field "data" (decoderRoot root decoder)))
+        (field "data" (nullable <| decoderRoot root decoder))
         (maybe (field "errors" (list decoderError)))
 
 

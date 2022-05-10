@@ -3,7 +3,7 @@
     "name": "gribouille/elm-graphql",
     "summary": "GraphQL ELM library",
     "license": "MPL-2.0",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "exposed-modules": [
         "GraphQL"
     ],
